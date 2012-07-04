@@ -92,6 +92,8 @@ describe "Bill" do
         @bill.iva_cond = target_iva_cond
         @bill.concepto = "Servicios"
 
+        debugger
+
         @bill.authorized?.should  == false
         @bill.authorize.should    == true
         @bill.authorized?.should  == true

@@ -5,7 +5,7 @@
 #
 # Modify following definitions according to your environment:
 #
-# URL=https://wsaahomo.afip.gov.ar/ws/services/LoginCms  # WSAA URL
+URL=https://wsaahomo.afip.gov.ar/ws/services/LoginCms  # WSAA URL
 # KEY=spec/fixtures/pkey      # file containing the private key in PEM format
 # CRT=spec/fixtures/cert.crt      # file containing the X.509 certificate in PEM format
 TAFN="TA.xml"    # file name of the output file
@@ -22,8 +22,8 @@ function MakeTRA()
 {
 #  FROM=$(date -j -f "%a %b %d %T %Z %Y" "`date -v0H -v0M -v0S`" "+%s")
 #  TO=$(date -j -f "%a %b %d %T %Z %Y" "`date -v23H -v59M -v59S`" "+%s")
-	FROM=$(date "+%Y-%m-%dT00:00:00-03:00")
-	TO=$(date "+%Y-%m-%dT23:59:59-03:00")
+  FROM=$(date "+%Y-%m-%dT00:00:00-03:00")
+  TO=$(date "+%Y-%m-%dT23:59:59-03:00")
   ID=$(date "+%s")
   TRA=$(cat <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -44,11 +44,12 @@ function MakeCMS()
 # Generate de CMS container (TRA + sign + certificate)
 #
 {
+  OPENSSL=$(which openssl)
   CMS=$(
     echo "$TRA" |
-    /usr/local/ssl/bin/openssl cms -sign -in /dev/stdin -signer $CRT -inkey $KEY -nodetach \
+    /usr/local/bin/openssl cms -sign -in /dev/stdin -signer $CRT -inkey $KEY -nodetach \
             -outform der |
-    /usr/local/ssl/bin/openssl base64 -e
+    /usr/local/bin/openssl base64 -e
   )
 }
 #------------------------------------------------------------------------------
@@ -81,7 +82,7 @@ function CallWSAA()
     echo "$REQUEST" |
     curl -k -H 'Content-Type: application/soap+xml; action=""' -d @- $URL
   )
-		echo "$REQUEST"
+  echo "$REQUEST"
 }
 #------------------------------------------------------------------------------
 function ParseTA()

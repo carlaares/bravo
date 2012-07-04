@@ -1,7 +1,7 @@
 $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'bravo'
 require 'rspec'
-require 'ruby-debug'
+require 'debugger'
 
 class SpecHelper
   include Savon::Logger
@@ -11,8 +11,8 @@ end
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
-Bravo.pkey = "spec/fixtures/pkey"
-Bravo.cert = "spec/fixtures/cert.crt"
+Bravo.pkey = "spec/fixtures/certs/pkey"
+Bravo.cert = "spec/fixtures/certs/cert.crt"
 Bravo.cuit = ENV["CUIT"] || raise(Bravo::NullOrInvalidAttribute.new, "Please set CUIT env variable.")
 Bravo.sale_point = "0002"
 Bravo.service_url = "http://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL"
