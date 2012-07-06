@@ -4,7 +4,14 @@ require 'rspec'
 require 'debugger'
 
 class SpecHelper
-  include Savon::Logger
+
+end
+
+Savon.configure do |config|
+  config.log = true
+  config.log_level = :info
+  config.pretty_print_xml = true
+  config.raise_errors = true
 end
 
 # Requires supporting files with custom matchers and macros, etc,

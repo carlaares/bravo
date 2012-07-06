@@ -1,6 +1,5 @@
 module Bravo
   class AuthData
-
     class << self
       def fetch
         unless File.exists?(Bravo.pkey)

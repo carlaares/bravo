@@ -84,6 +84,17 @@ describe "Bill" do
       detail["FchVtoPago"].should   == "20111210"
     end
 
+    it "fetches the next invoice number", focus: true do
+      @bill.net = 100
+      @bill.aliciva_id = 2
+      @bill.doc_num = "30710151543"
+      @bill.iva_cond = :responsable_inscripto
+      @bill.concepto = "Servicios"
+
+      @bill.next_bill_number
+
+    end
+
     Bravo::BILL_TYPE[Bravo.own_iva_cond].keys.each do |target_iva_cond|
       it "should authorize a valid bill for #{target_iva_cond.to_s}" do
         @bill.net = 1000000
@@ -91,8 +102,6 @@ describe "Bill" do
         @bill.doc_num = "30710151543"
         @bill.iva_cond = target_iva_cond
         @bill.concepto = "Servicios"
-
-        debugger
 
         @bill.authorized?.should  == false
         @bill.authorize.should    == true

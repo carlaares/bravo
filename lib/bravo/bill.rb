@@ -23,8 +23,7 @@ module Bravo
 
     def exchange_rate
       return 1 if moneda == :peso
-      response = client.fe_param_get_cotizacion do |soap|
-        soap.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
+      response = client.request(:fe_param_get_cotizacion) do |soap|
         soap.body = body.merge!({"MonId" => Bravo::MONEDAS[moneda][:codigo]})
       end
       response.to_hash[:fe_param_get_cotizacion_response][:fe_param_get_cotizacion_result][:result_get][:mon_cotiz].to_f
@@ -41,8 +40,7 @@ module Bravo
 
     def authorize
       setup_bill
-      response = client.fecae_solicitar do |soap|
-        soap.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
+      response = client.request(:fecae_solicitar) do |soap|
         soap.body = body
       end
 
@@ -89,7 +87,7 @@ module Bravo
     end
 
     def next_bill_number
-      resp = client.fe_comp_ultimo_autorizado do |s|
+      resp = client.request(:fe_comp_ultimo_autorizado) do |s|
         s.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
         s.body = {"Auth" => Bravo.auth_hash, "PtoVta" => Bravo.sale_point, "CbteTipo" => cbte_type}
       end

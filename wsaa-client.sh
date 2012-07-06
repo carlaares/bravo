@@ -5,7 +5,7 @@
 #
 # Modify following definitions according to your environment:
 #
-URL=https://wsaahomo.afip.gov.ar/ws/services/LoginCms  # WSAA URL
+URL=http://wsaahomo.afip.gov.ar/ws/services/LoginCms  # WSAA URL
 # KEY=spec/fixtures/pkey      # file containing the private key in PEM format
 # CRT=spec/fixtures/cert.crt      # file containing the X.509 certificate in PEM format
 TAFN="TA.xml"    # file name of the output file
