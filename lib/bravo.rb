@@ -13,6 +13,8 @@ module Bravo
   # Exception Class for missing or invalid certifficate
   #
   class MissingCertificate < StandardError; end
+
+  class MissingCredentials < StandardError; end
   # This class handles the logging options
   #
   class Logger
@@ -32,13 +34,14 @@ module Bravo
     end
   end
 
-  autoload :Authorizer, 'bravo/authorizer'
-  autoload :AuthData,   'bravo/auth_data'
-  autoload :Bill,       'bravo/bill'
-  autoload :Constants,  'bravo/constants'
-  autoload :Wsaa,       'bravo/wsaa'
-  autoload :Reference,  'bravo/reference'
-  autoload :Request,    'bravo/request'
+  autoload :Authorizer,     'bravo/authorizer'
+  autoload :AuthData,       'bravo/auth_data'
+  autoload :Bill,           'bravo/bill'
+  autoload :Constants,      'bravo/constants'
+  autoload :Authorization,  'bravo/authorization'
+  autoload :Wsaa,           'bravo/wsaa'
+  autoload :Reference,      'bravo/reference'
+  autoload :Request,        'bravo/request'
 
   extend self
 
