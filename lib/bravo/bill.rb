@@ -17,8 +17,10 @@ module Bravo
       :response, :invoice_type
 
     # rubocop:disable Metrics/AbcSize
-    def initialize(attrs = {})
-      @client ||= Savon.client({ wsdl: AuthData.wsfe_url }.merge! Bravo.logger_options)
+    def initialize(cuit, attrs = {})
+      @cuit = cuit
+
+      @client ||= Savon.client({ wsdl: Authorization.wsfe_url }.merge! Bravo.logger_options)
       @net            = attrs.fetch(:net, 0).to_d
       @document_type  = attrs.fetch(:document_type, Bravo.default_documento)
       @currency       = attrs.fetch(:currency, Bravo.default_moneda)
@@ -28,25 +30,9 @@ module Bravo
     end
     # rubocop:enable Metrics/AbcSize
 
-    def inspect
-      %{#<Bravo::Bill net: #{ net.inspect }, document_number: #{ document_number }, \
-iva_condition: "#{ iva_condition }", document_type: "#{ document_type }", concept: "#{ concept }", \
-currency: "#{ currency }", due_date: "#{ due_date }", aliciva_id: "#{ aliciva_id }", \
-date_from: #{ date_from.inspect }, date_to: #{ date_to.inspect }, invoice_type: #{ invoice_type }>}
-    end
-
-    def to_hash
-      { net: net, document_number: document_number, iva_condition: iva_condition, invoice_type: invoice_type,
-        document_type: document_type, concept: concept, currency: currency, due_date: due_date,
-        aliciva_id: aliciva_id, date_from: date_from, date_to: date_to, body: body }
-    end
-
-    def to_yaml
-      to_hash.to_yaml
-    end
-
+    # @private
     def body
-      @body ||= { 'Auth' => AuthData.auth_hash }
+      @body ||= { 'Auth' => Authorization.for(@cuit).auth_hash }
     end
 
     # Searches the corresponding invoice type according to the combination of
@@ -105,7 +91,7 @@ date_from: #{ date_from.inspect }, date_to: #{ date_to.inspect }, invoice_type: 
       request.iva_amount    = calculate_iva_sum
       request.total         = calculate_total
 
-      request.from = request.to = Reference.next_bill_number(bill_type)
+      request.from = request.to = Reference.next_bill_number(@cuit, bill_type)
       request.document_number = document_number
 
       request.date_from = date_from || today

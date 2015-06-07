@@ -11,7 +11,7 @@ module Bravo
     # rubocop:disable Metrics/AbcSize
     # rubocop:disable Metrics/MethodLength
     def build_details
-      hsh = {
+      details = {
         'FECAEDetRequest' => {
           'Concepto'    => concept,
           'DocTipo'     => document_type,
@@ -40,7 +40,7 @@ module Bravo
           }
         }
       }
-      hsh.reject { |k, _v| hsh[k].nil? }
+      details.reject { |_k, v| v.nil? }
     end
     # rubocop:enable Metrics/AbcSize
     # rubocop:enable Metrics/MethodLength

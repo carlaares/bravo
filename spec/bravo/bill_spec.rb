@@ -3,7 +3,7 @@ require 'spec_helper'
 
 module Bravo
   describe Bill do
-    let(:bill) { Bravo::Bill.new(iva_condition: :consumidor_final, invoice_type: :invoice) }
+    let(:bill) { Bravo::Bill.new('20287740027', iva_condition: :consumidor_final, invoice_type: :invoice) }
 
     describe '.header' do
       subject(:header) { described_class.header(0) }
@@ -25,7 +25,11 @@ module Bravo
     end
 
     describe '.body' do
-      it 'sets up a body if there is none' do
+      before do
+        create_auth
+      end
+
+      it 'sets up a body if there is none', vcr: { cassette_name: 'valid_login' } do
         %w[Token Sign Cuit].each do |key|
           expect(bill.body['Auth'].fetch(key, nil)).not_to be_nil
         end
@@ -61,11 +65,11 @@ module Bravo
 
     describe '#setup_bill' do
       before do
-        bill.net        = 100
+        bill.net = 100
         bill.aliciva_id = 2
-        bill.document_number    = '30710151543'
-        bill.iva_condition   = :responsable_inscripto
-        bill.concept   = 'Servicios'
+        bill.document_number = '30710151543'
+        bill.iva_condition = :responsable_inscripto
+        bill.concept = 'Servicios'
       end
 
       it 'uses today dates when due and service dates are null',
@@ -95,7 +99,7 @@ module Bravo
     end
 
     describe '#authorize' do
-      describe 'for facturas' do
+      describe 'for invoices' do
         Bravo::BILL_TYPE[Bravo.own_iva_cond].keys.each do |target_iva_cond|
           describe "issued to #{ target_iva_cond }" do
             Bravo::BILL_TYPE[Bravo.own_iva_cond][target_iva_cond].keys.each do |bill_type|
@@ -110,7 +114,7 @@ module Bravo
 
                 expect(bill.authorized?).to  be_falsey
 
-                expect(bill.authorize).to   be_truthy
+                expect(bill.authorize).to    be_truthy
                 expect(bill.authorized?).to  be_truthy
 
                 response = bill.response
@@ -122,6 +126,11 @@ module Bravo
           end
         end
       end
+    end
+
+    def create_auth
+      Authorization.create(cuit: '20287740027', pkey_path: 'spec/fixtures/certs/pkey',
+        cert_path: 'spec/fixtures/certs/cert.crt')
     end
   end
 end

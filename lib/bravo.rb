@@ -35,7 +35,6 @@ module Bravo
   end
 
   autoload :Authorizer,     'bravo/authorizer'
-  autoload :AuthData,       'bravo/auth_data'
   autoload :Bill,           'bravo/bill'
   autoload :Constants,      'bravo/constants'
   autoload :Authorization,  'bravo/authorization'
@@ -45,8 +44,21 @@ module Bravo
 
   extend self
 
-  attr_accessor :cuit, :sale_point, :default_documento, :pkey, :cert, :default_concepto, :default_moneda,
+  attr_accessor :sale_point, :default_documento, :default_concepto, :default_moneda,
     :own_iva_cond, :openssl_bin
+
+  attr_reader :environment
+
+  # Used to set the environment. Validates the value with the existing environments
+  #
+  def self.environment=(env)
+    env = env.to_sym
+    if Bravo::URLS.keys.include?(env)
+      @environment = env
+    else
+      raise "invalid environment: #{ env }. Choose one from [#{ Bravo::URLS.keys.join(', ') }]"
+    end
+  end
 
   # Receiver of the logging configuration options.
   # @param opts [Hash] pass a hash with `log`, `pretty_xml` and `level` keys to set
