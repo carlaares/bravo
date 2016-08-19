@@ -17,7 +17,6 @@ module Bravo
       @cuit = cuit
       @pkey_path = validate_path(pkey)
       @cert_path = validate_path(cert)
-      self
     end
 
     # Returns the WSFE url for the specified environment

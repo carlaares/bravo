@@ -7,15 +7,7 @@
 
 ## Requisitos
 
-Para poder autorizar comprobantes mediante el WSFE, AFIP requiere de ciertos pasos detallados a continuación:
-
-* Generar una clave privada para la aplicación.
-* Generar un CSR (Certificate Signing Request) utilizando el número de CUIT que emitirá los comprobantes y la clave privada del paso anterior. Se deberá enviar a AFIP el CSR para obtener el Certificado X.509 que se utilizará en el proceso de autorización de comprobantes.
-	* Para el entorno de Testing, se debe enviar el X.509 por email a _webservices@afip.gov.ar_.
-	* Para el entorno de Producción, el trámite se hace a través del portal [AFIP](http://www.afip.gov.ar)
-* El certificado X.509 y la clave privada son utilizados por el WSAA para identificarse frente a los servicios de AFIP. El WSAA permite obtener el token y signature a incluir en el header de autenticacion en cada request que hagamaos a los servicios de AFIP.
-
-
+Guía para obtener certificados WSAA [aquí](http://www.afip.gov.ar/ws/WSAA/cert-req-howto.txt)
 ### OpenSSL
 
 Para cumplir con los requisitos de encriptación del [Web Service de Autenticación y Autorización](http://www.afip.gov.ar/ws/WSAA/README.txt) (WSAA), Bravo requiere [OpenSSL](http://openssl.org) en cualquier versión igual o posterior a la 1.0.0a.
