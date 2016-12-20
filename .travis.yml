@@ -10,3 +10,6 @@ branches:
 script:
   - bundle exec rspec spec
   - bundle exec rubocop
+addons:
+  code_climate:
+    repo_token: d2565426bec84943089cd897d8847bbe11d18912481dac2d16d0b60ff14b0453
