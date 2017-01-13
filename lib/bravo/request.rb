@@ -30,17 +30,26 @@ module Bravo
           'FchServDesde' => date_from,
           'FchServHasta' => date_to,
           'FchVtoPago' => due_on,
-
-          'Iva' => {
-            'AlicIva' => {
-              'Id'      => iva_code,
-              'BaseImp' => net_amount,
-              'Importe' => iva_amount
-            }
-          }
+          'Iva' => iva_array
         }
       }
       details.reject { |_k, v| v.nil? }
+    end
+
+    private
+
+    def iva_array
+      if Bravo.own_iva_cond == :responsable_monotributo
+        nil
+      else
+        {
+          'AlicIva' => {
+            'Id'      => iva_code,
+            'BaseImp' => net_amount,
+            'Importe' => iva_amount
+          }
+        }
+      end
     end
     # rubocop:enable Metrics/AbcSize
     # rubocop:enable Metrics/MethodLength
